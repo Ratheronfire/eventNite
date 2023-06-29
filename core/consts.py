@@ -1,5 +1,6 @@
 import json
 import os
+from json import JSONDecodeError
 from pathlib import Path
 
 
@@ -24,5 +25,10 @@ def read_event_file():
 def write_event_file(data):
     event_path = Path(data_folder(), 'events.json')
 
+    try:
+        json.dumps(data)
+    except JSONDecodeError:
+        return  # Testing if we can parse the data before trying to write it.
+
     with open(event_path, 'w') as event_file:
-        return event_file.write(json.dumps(data))
+        event_file.write(json.dumps(data))
